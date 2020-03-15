@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Scrapes the Robert-Koch-Institute website for covid-19 infections grouped by federal state"""
 import re
 import requests
