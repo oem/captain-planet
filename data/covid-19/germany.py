@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 """Scrapes the Robert-Koch-Institute website for covid-19 infections grouped by federal state"""
-import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -11,21 +10,11 @@ def main():
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
     results = soup.find_all("tr")
-    for result in results[1:-1]:
+    for result in results[2:]:
         state = result.find("td").text
-        confirmed = result.td.next_sibling.text
-        confirmed, deaths = parse_confirmed(confirmed)
+        confirmed = result.td.next_sibling.text.replace(".", "")
+        deaths = result.findChildren("td")[4].text
         print(f"{state}: {confirmed}, deaths: {deaths}")
-
-
-def parse_confirmed(confirmed):
-    """Extracts death toll from total confirmed number."""
-    confirmed = confirmed.replace(".", "")
-    pattern = re.compile("^(.+?)\s*\((.+)\)$")
-    match = re.search(pattern, confirmed)
-    if match is None:
-        return int(confirmed), 0
-    return int(match.group(1)), int(match.group(2))
 
 
 if __name__ == "__main__":
