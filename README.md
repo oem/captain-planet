@@ -4,7 +4,7 @@
 
 ## covid-19
 
-[covid-19](docs/clusters.png)
+![covid-19](docs/clusters.png)
 
 ### report
 
