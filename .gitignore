@@ -1,3 +1,4 @@
 env
 .vscode
 .Rproj.user
+*.nb.html
