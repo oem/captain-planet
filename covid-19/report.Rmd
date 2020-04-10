@@ -56,6 +56,13 @@ summary_df <- coronavirus %>% group_by(Country.Region, type) %>%
 head(summary_df, 10)
 ```
 
+### Total deaths per country
+
+```{r echo=FALSE}
+deaths_df <- summary_df %>% filter(type == "death") %>% select(Country.Region, total_cases)
+head(deaths_df, 10)
+```
+
 
 ```{r echo=FALSE}
 newest <- coronavirus %>% 
@@ -92,14 +99,6 @@ ggplot(head(confirmed_cases,10), aes(reorder(country, confirmed), confirmed)) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
-**April 8**
-The number of new cases is still rising in the US, to 32829 new cases. France saw a drop in new cases while Germany saw a slight increase in new cases.
-
-**April 7**
-
-The US is still leading the charts with a terrifying number of almost 30.000 new cases.
-
-France has the second-highest number of new cases, with more than 11.000 new cases.
 
 \clearpage
 ## New Deaths due to COVID-19
@@ -117,13 +116,6 @@ ggplot(head(deaths,10), aes(reorder(country, death), death)) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
-**April 8**
-The UK is experiencing a wave of new deaths (940 deaths today), while the US continues to have the most deaths caused by COVID-19 (1973 today).
-
-**April 7**
-
-France is experiencing a sad rise in deaths caused by the corona virus, 1417 today, only overshadowed by the deaths in the US, which lost 1939 people to the virus today.
-
 \clearpage
 ## New Recovered Cases
 
@@ -139,13 +131,6 @@ ggplot(head(recovered_cases,10), aes(reorder(country, recovered), recovered)) +
   xlab("") + 
   theme(axis.text.x = element_text(angle = 90))
 ```
-
-**April 8**
-The number of todays' recovered cases in Germany rose to over 10000 and Spain also seems to slowly recover.
-
-**April 7**
-
-Germany could report 7381 recovered cases, the most world-wide.
 
 \clearpage
 
