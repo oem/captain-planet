@@ -1,0 +1,252 @@
+---
+title: "Covid-19 Report"
+author: Ömür Özkir
+date: April 10, 2020
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    fig_width: 7
+    df_print: kable
+  html_notebook: default
+editor_options: 
+  chunk_output_type: inline
+---
+
+# The dataset
+
+The dataset used is available at [Github](https://ramikrispin.github.io/coronavirus/) under https://ramikrispin.github.io/coronavirus/ and updated daily (but might be delayed by up to a day).
+
+The source additionally provides the data as csv file and also offers a comprehensive dashboard based on this dataset.
+
+```{r echo=FALSE}
+library(dplyr, warn.conflicts = FALSE)
+library(readr)
+library(ggplot2)
+library(ggthemes)
+library(tidyr)
+library(knitr)
+
+# to update the dataset:
+# devtools::install_github("covid19r/coronavirus")
+library(coronavirus)
+data(coronavirus)
+```
+
+\clearpage
+
+# The Last 24 Hours
+
+## Worldwide Confirmed Cases
+
+```{r echo=FALSE}
+total <- coronavirus %>% 
+  filter(type == "confirmed") %>% 
+  summarise( latest_report = max(date), confirmed_cases = sum(cases))
+total
+```
+
+## Total cases by country
+
+```{r echo=FALSE}
+summary_df <- coronavirus %>% group_by(Country.Region, type) %>%
+  summarise(total_cases = sum(cases)) %>%
+  arrange(-total_cases)
+
+head(summary_df, 10)
+```
+
+
+```{r echo=FALSE}
+newest <- coronavirus %>% 
+  filter(date == max(date)) %>%
+  select(country = Country.Region, type, cases) %>%
+  group_by(country, type) %>%
+  summarise(total_cases = sum(cases)) %>%
+  pivot_wider(names_from = type,
+              values_from = total_cases)
+
+confirmed_cases <- arrange(select(newest, country, confirmed), -confirmed)
+deaths <- arrange(select(newest, country, death), -death)
+recovered_cases <- arrange(select(newest, country, recovered), -recovered)
+```
+
+\clearpage
+## Confirmed New Cases
+
+These numbers are only as good as the amount of testing done and should be taken with a grain of salt.
+
+Also keep in mind that there is a significant delay between being infected and having the results of the test.
+Testing in most countries will only be done once symptoms appear and the test itself can also take a few days.
+The numbers basically reflect the state of a few days in the past (the exact number of days varies from country to country).
+
+```{r echo=FALSE}
+head(confirmed_cases, 10)
+```
+
+```{r echo=FALSE}
+ggplot(head(confirmed_cases,10), aes(reorder(country, confirmed), confirmed)) + 
+  geom_bar(stat="identity", fill="black") +
+  theme_economist() + 
+  xlab("") + 
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+**April 8**
+The number of new cases is still rising in the US, to 32829 new cases. France saw a drop in new cases while Germany saw a slight increase in new cases.
+
+**April 7**
+
+The US is still leading the charts with a terrifying number of almost 30.000 new cases.
+
+France has the second-highest number of new cases, with more than 11.000 new cases.
+
+\clearpage
+## New Deaths due to COVID-19
+
+```{r echo=FALSE}
+head(deaths, 10)
+```
+
+```{r echo=FALSE}
+ggplot(head(deaths,10), aes(reorder(country, death), death)) + 
+  geom_bar(stat="identity", fill="black") +
+  theme_economist() + 
+  xlab("") + 
+  ylab("deaths") +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+**April 8**
+The UK is experiencing a wave of new deaths (940 deaths today), while the US continues to have the most deaths caused by COVID-19 (1973 today).
+
+**April 7**
+
+France is experiencing a sad rise in deaths caused by the corona virus, 1417 today, only overshadowed by the deaths in the US, which lost 1939 people to the virus today.
+
+\clearpage
+## New Recovered Cases
+
+```{r echo=FALSE, position="left"}
+head(recovered_cases, 10)
+```
+
+
+```{r echo=FALSE}
+ggplot(head(recovered_cases,10), aes(reorder(country, recovered), recovered)) +
+  geom_bar(stat="identity", fill="black") +
+  theme_economist() + 
+  xlab("") + 
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+**April 8**
+The number of todays' recovered cases in Germany rose to over 10000 and Spain also seems to slowly recover.
+
+**April 7**
+
+Germany could report 7381 recovered cases, the most world-wide.
+
+\clearpage
+
+# Trends
+
+```{r echo=FALSE}
+cases_df <- coronavirus %>% 
+  group_by(Country.Region) %>% 
+  arrange(date) %>% 
+  filter(cases > 0)
+cases_confirmed <- cases_df %>% filter(type == "confirmed")
+cases_deaths <- cases_df %>% filter(type == "death")
+cases_recovered <- cases_df %>% filter(type == "recovered")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend <- function(cases_df, country, title) {
+  cases_by_country <- cases_df %>% filter(Country.Region == country)
+  ggplot(select(cases_by_country, date, cases, Country.Region), aes(date, cases)) + 
+    geom_bar(stat="identity", fill="black") +
+    theme_economist() +
+    ggtitle(title) +
+    xlab("") +
+    ylab("")
+}
+```
+
+## Worldwide
+
+```{r echo=FALSE, fig.height=2.6}
+ggplot(select(cases_confirmed,date,cases, Country.Region), aes(date, cases)) + 
+  geom_bar(stat="identity", fill="black") +
+  theme_economist() +
+  ggtitle("New Confirmed Cases") +
+  xlab("") +
+  ylab("")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+ggplot(select(cases_recovered,date,cases, Country.Region), aes(date, cases)) + 
+  geom_bar(stat="identity", fill="black") +
+  theme_economist() +
+  ggtitle("New Recovered Cases") +
+  xlab("") +
+  ylab("")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+ggplot(select(cases_deaths,date,cases, Country.Region), aes(date, cases)) + 
+  geom_bar(stat="identity", fill="black") +
+  theme_economist() +
+  ggtitle("New Deaths due to COVID-19") +
+  xlab("") +
+  ylab("")
+```
+
+\clearpage
+
+## Germany
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_confirmed, "Germany", "New Confirmed Cases")
+```
+
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_recovered, "Germany", "New Recovered Cases")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_deaths, "Germany", "New Deaths due to COVID-19")
+```
+\clearpage
+
+## France
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_confirmed, "France", "New Confirmed Cases")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_recovered, "France", "New Recovered Cases")
+```
+
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_deaths, "France", "New Deaths due to COVID-19")
+```
+
+\clearpage
+
+## Italy
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_confirmed, "Italy", "New Confirmed Cases")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_recovered, "Italy", "New Recovered Cases")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_deaths, "Italy", "New Deaths due to COVID-19")
+```
