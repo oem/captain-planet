@@ -4,6 +4,8 @@
 
 ## covid-19
 
+[covid-19](docs/clusters.png)
+
 ### report
 
 Following the development of the pandemic with some visualizations and number crunching.
