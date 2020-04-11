@@ -1,7 +1,7 @@
 ---
 title: "Covid-19 Report"
 author: Ömür Özkir
-date: April 10, 2020
+date: April 11, 2020
 output:
   pdf_document:
     toc: true
@@ -13,6 +13,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
+\clearpage
 # The dataset
 
 The dataset used is available at [Github](https://ramikrispin.github.io/coronavirus/) under https://ramikrispin.github.io/coronavirus/ and updated daily (but might be delayed by up to a day).
@@ -33,7 +34,6 @@ library(coronavirus)
 data(coronavirus)
 ```
 
-\clearpage
 
 # The Last 24 Hours
 
