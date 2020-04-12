@@ -1,14 +1,14 @@
 ---
 title: "Covid-19 Report"
 author: Ömür Özkir
-date: April 11, 2020
+date: April 12, 2020
 output:
-  html_notebook: default
   pdf_document:
     toc: true
     toc_depth: 3
     fig_width: 7
     df_print: kable
+  html_notebook: default
 editor_options: 
   chunk_output_type: inline
 ---
