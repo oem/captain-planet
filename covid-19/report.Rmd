@@ -1,7 +1,7 @@
 ---
 title: "Covid-19 Report"
 author: Ömür Özkir
-date: April 13, 2020
+date: April 14, 2020
 output:
   pdf_document:
     toc: true
@@ -29,7 +29,7 @@ library(tidyr)
 library(knitr)
 
 # to update the dataset:
-# devtools::install_github("covid19r/coronavirus")
+# devtools::install_github("covid19r/coronavirus", force=TRUE)
 library(coronavirus)
 data(coronavirus)
 ```
