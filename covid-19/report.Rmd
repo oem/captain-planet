@@ -235,3 +235,19 @@ plot_trend(cases_recovered, "Italy", "New Recovered Cases")
 ```{r echo=FALSE, fig.height=2.6}
 plot_trend(cases_deaths, "Italy", "New Deaths due to COVID-19")
 ```
+
+\clearpage
+
+## Spain
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_confirmed, "Spain", "New Confirmed Cases")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_recovered, "Spain", "New Recovered Cases")
+```
+
+```{r echo=FALSE, fig.height=2.6}
+plot_trend(cases_deaths, "Spain", "New Deaths due to COVID-19")
+```
