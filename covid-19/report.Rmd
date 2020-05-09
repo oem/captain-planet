@@ -1,7 +1,7 @@
 ---
 title: "Covid-19 Report"
 author: Ömür Özkir
-date: May 7, 2020
+date: May 9, 2020
 output:
   pdf_document:
     toc: true
