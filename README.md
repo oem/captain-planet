@@ -16,8 +16,8 @@ You can find the newest version of the report as [PDF here](covid-19/report.pdf)
 
 Get current covid-19 numbers for germany, detailed for each state:
 
-`docker run --rm -it oembot/captain-planet covid-19/germany.py`
+`docker run --rm oembot/captain-planet covid-19/germany.py`
 
 Get current covid-19 numbers for hamburg, germany:
 
-`docker run --rm -it oembot/captain-planet covid-19/hamburg.py`
+`docker run --rm oembot/captain-planet covid-19/hamburg.py`
