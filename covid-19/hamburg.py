@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Scrapes hamburg.de/corona-zahlen for detailed covid-19 numbers for hamburg."""
 
+import json
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -38,7 +39,7 @@ def main():
     infections = parse_infections(soup)
     deaths = parse_deaths(soup)
     hospitalizations = parse_hospitalizations(soup)
-    print({**infections, **deaths, **hospitalizations})
+    print(json.dumps({**infections, **deaths, **hospitalizations}))
 
 
 if __name__ == "__main__":
