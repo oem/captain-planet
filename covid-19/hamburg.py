@@ -40,6 +40,21 @@ def parse_body(soup, labels, selector):
     return dict(zip(labels, tags))
 
 
+def parse_boroughs(soup):
+    """Parse borough data from webcrawler"""
+    tags = soup.select(".table-article tr")[18:]
+    tags = [tag.find_all("td") for tag in tags]
+    tags = [
+        {
+            "name": tag[0].text,
+            "confirmed": int(tag[1].text),
+            "difference": int(tag[2].text.replace(" ", "")),
+        }
+        for tag in tags
+    ]
+    return {"boroughs": tags}
+
+
 def main():
     """The data is being updated on a daily basis"""
     url = "https://www.hamburg.de/corona-zahlen/"
@@ -48,7 +63,8 @@ def main():
     infections = parse_infections(soup)
     deaths = parse_deaths(soup)
     hospitalizations = parse_hospitalizations(soup)
-    print(json.dumps({**infections, **deaths, **hospitalizations}))
+    boroughs = parse_boroughs(soup)
+    print(json.dumps({**infections, **deaths, **hospitalizations, **boroughs}))
 
 
 if __name__ == "__main__":
