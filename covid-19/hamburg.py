@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 
 def parse_infections(soup):
+    """Parses current infection numbers from the crawled webpage"""
     return parse_body(
         soup,
         ["confirmed-total", "recovered", "new infections"],
@@ -16,12 +17,14 @@ def parse_infections(soup):
 
 
 def parse_deaths(soup):
+    """Parses the current numbers for deaths due to covid-19 from the webpage"""
     return parse_body(
         soup, ["deaths-total", "new deaths"], ".c_chart.two .chart_legend li"
     )
 
 
 def parse_hospitalizations(soup):
+    """Parses the current numbers for hospitalizations from the webpage"""
     return parse_body(
         soup,
         ["hospitalizations-total", "intensive-care", "intensive-care-from-hamburg"],
@@ -30,7 +33,7 @@ def parse_hospitalizations(soup):
 
 
 def parse_body(soup, labels, selector):
-    """parse selected content from the crawled webpage and label it"""
+    """Parse selected content from the crawled webpage and label it"""
     tags = soup.select(selector)
     tags = [re.search(r"\d+$", tag.text) for tag in tags]
     tags = [int(tag.group(0)) for tag in tags if tag]
