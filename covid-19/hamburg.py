@@ -55,8 +55,8 @@ def parse_boroughs(soup):
     return {"boroughs": tags}
 
 
-def main():
-    """The data is being updated on a daily basis"""
+def collect_stats():
+    """Crawls hamburg.de for detailed covid-19 numbers"""
     url = "https://www.hamburg.de/corona-zahlen/"
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
@@ -64,7 +64,12 @@ def main():
     deaths = parse_deaths(soup)
     hospitalizations = parse_hospitalizations(soup)
     boroughs = parse_boroughs(soup)
-    print(json.dumps({**infections, **deaths, **hospitalizations, **boroughs}))
+    return json.dumps({**infections, **deaths, **hospitalizations, **boroughs})
+
+
+def main():
+    """The data is being updated on a daily basis"""
+    print(collect_stats())
 
 
 if __name__ == "__main__":
