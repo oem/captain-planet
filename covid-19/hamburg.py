@@ -8,25 +8,31 @@ from bs4 import BeautifulSoup
 
 
 def parse_infections(soup):
-    tags = soup.select(".c_chart.one .chart_legend li")
-    tags = [re.search(r"\d+$", tag.text) for tag in tags]
-    labels = ["confirmed-total", "recovered", "new infections"]
-    tags = [int(tag.group(0)) for tag in tags if tag]
-    return dict(zip(labels, tags))
+    return parse_body(
+        soup,
+        ["confirmed-total", "recovered", "new infections"],
+        ".c_chart.one .chart_legend li",
+    )
 
 
 def parse_deaths(soup):
-    tags = soup.select(".c_chart.two .chart_legend li")
-    tags = [re.search(r"\d+$", tag.text) for tag in tags]
-    labels = ["deaths-total", "new deaths"]
-    tags = [int(tag.group(0)) for tag in tags if tag]
-    return dict(zip(labels, tags))
+    return parse_body(
+        soup, ["deaths-total", "new deaths"], ".c_chart.two .chart_legend li"
+    )
 
 
 def parse_hospitalizations(soup):
-    tags = soup.select(".c_chart.three .chart_legend li")
+    return parse_body(
+        soup,
+        ["hospitalizations-total", "intensive-care", "intensive-care-from-hamburg"],
+        ".c_chart.three .chart_legend li",
+    )
+
+
+def parse_body(soup, labels, selector):
+    """parse selected content from the crawled webpage and label it"""
+    tags = soup.select(selector)
     tags = [re.search(r"\d+$", tag.text) for tag in tags]
-    labels = ["hospitalizations-total", "intensive-care", "intensive-care-from-hamburg"]
     tags = [int(tag.group(0)) for tag in tags if tag]
     return dict(zip(labels, tags))
 
