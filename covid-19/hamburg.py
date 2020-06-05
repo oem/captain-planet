@@ -55,6 +55,13 @@ def parse_boroughs(soup):
     return {"boroughs": tags}
 
 
+def parse_trend(soup):
+    """Parses the seven-day chart"""
+    tags = soup.select(".cv_chart_container .value_show")
+    tags = [int(tag.text) for tag in tags]
+    return {"new_confirmed_in_last_seven_days": tags}
+
+
 def collect_stats():
     """Crawls hamburg.de for detailed covid-19 numbers"""
     url = "https://www.hamburg.de/corona-zahlen/"
@@ -64,7 +71,8 @@ def collect_stats():
     deaths = parse_deaths(soup)
     hospitalizations = parse_hospitalizations(soup)
     boroughs = parse_boroughs(soup)
-    return json.dumps({**infections, **deaths, **hospitalizations, **boroughs})
+    trend = parse_trend(soup)
+    return json.dumps({**infections, **deaths, **hospitalizations, **boroughs, **trend})
 
 
 def main():
