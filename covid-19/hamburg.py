@@ -17,7 +17,7 @@ def crawl_covid19_stats():
     hospitalizations = _parse_hospitalizations(soup)
     boroughs = _parse_boroughs(soup)
     trend = _parse_trend(soup)
-    return json.dumps({**infections, **deaths, **hospitalizations, **boroughs, **trend})
+    return {**infections, **deaths, **hospitalizations, **boroughs, **trend}
 
 
 def _parse_infections(soup):
@@ -75,10 +75,5 @@ def _parse_trend(soup):
     return {"new_confirmed_in_last_seven_days": tags}
 
 
-def main():
-    """The data is being updated on a daily basis"""
-    print(crawl_covid19_stats())
-
-
 if __name__ == "__main__":
-    main()
+    print(json.dumps(crawl_covid19_stats()))
