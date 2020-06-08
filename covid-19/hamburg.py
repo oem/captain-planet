@@ -21,7 +21,6 @@ def crawl_covid19_stats():
 
 
 def _parse_infections(soup):
-    """Parses current infection numbers from the crawled webpage"""
     return _parse_body(
         soup,
         ["confirmed-total", "recovered", "new infections"],
@@ -30,14 +29,12 @@ def _parse_infections(soup):
 
 
 def _parse_deaths(soup):
-    """Parses the current numbers for deaths due to covid-19 from the webpage"""
     return _parse_body(
         soup, ["deaths-total", "new deaths"], ".c_chart.two .chart_legend li"
     )
 
 
 def _parse_hospitalizations(soup):
-    """Parses the current numbers for hospitalizations from the webpage"""
     return _parse_body(
         soup,
         ["hospitalizations-total", "intensive-care", "intensive-care-from-hamburg"],
@@ -46,7 +43,6 @@ def _parse_hospitalizations(soup):
 
 
 def _parse_body(soup, labels, selector):
-    """Parse selected content from the crawled webpage and label it"""
     tags = soup.select(selector)
     tags = [re.search(r"\d+$", tag.text) for tag in tags]
     tags = [int(tag.group(0)) for tag in tags if tag]
@@ -54,7 +50,6 @@ def _parse_body(soup, labels, selector):
 
 
 def _parse_boroughs(soup):
-    """Parse borough data from webcrawler"""
     tags = soup.select(".table-article tr")[18:]
     tags = [tag.find_all("td") for tag in tags]
     tags = [
@@ -69,7 +64,6 @@ def _parse_boroughs(soup):
 
 
 def _parse_trend(soup):
-    """Parses the seven-day chart"""
     tags = soup.select(".cv_chart_container .value_show")
     tags = [int(tag.text) for tag in tags]
     return {"new_confirmed_in_last_seven_days": tags}
