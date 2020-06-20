@@ -20,6 +20,13 @@ def crawl_covid19_stats():
     return {**infections, **deaths, **hospitalizations, **boroughs, **trend}
 
 
+def _parse_body(soup, labels, selector):
+    tags = soup.select(selector)
+    tags = [re.search(r"\d+$", tag.text) for tag in tags]
+    tags = [int(tag.group(0)) for tag in tags if tag]
+    return dict(zip(labels, tags))
+
+
 def _parse_infections(soup):
     return _parse_body(
         soup,
@@ -40,13 +47,6 @@ def _parse_hospitalizations(soup):
         ["hospitalizations-total", "intensive-care", "intensive-care-from-hamburg"],
         ".c_chart.three .chart_legend li",
     )
-
-
-def _parse_body(soup, labels, selector):
-    tags = soup.select(selector)
-    tags = [re.search(r"\d+$", tag.text) for tag in tags]
-    tags = [int(tag.group(0)) for tag in tags if tag]
-    return dict(zip(labels, tags))
 
 
 def _parse_boroughs(soup):
