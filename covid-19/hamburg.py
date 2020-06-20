@@ -50,7 +50,7 @@ def _parse_body(soup, labels, selector):
 
 
 def _parse_boroughs(soup):
-    tags = soup.select(".table-article tr")[18:]
+    tags = soup.select(".table-article tr")[7:]
     tags = [tag.find_all("td") for tag in tags]
     tags = [
         {
